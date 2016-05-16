@@ -16,6 +16,14 @@ const initFirebase = () =>
     }
   })
 
+const checkAndInitFirebase = (snapshot) => {
+  if (!snapshot.exists()) {
+    return initFirebase()
+  } else {
+    return Promise.resolve()
+  }
+}
+
 const setupUser = () => {
   fb.child("users").update({
     [id]: {
@@ -26,12 +34,22 @@ const setupUser = () => {
   })
 }
 
+
+
+
+// render
+
+const render = (data) => {
+  console.log("rendering: ", data)
+}
+
 fb.once("value", (snapshot) => {
-  if (!snapshot.exists()) {
-    initFirebase()
-    .then(() => console.log("Initialized Database"))
+  checkAndInitFirebase(snapshot)
     .then(() => setupUser())
-  } else {
-    setupUser()
-  }
+    .then(() => {
+      fb.on("value", (snapshot) => {
+        console.log(snapshot.val())
+        render(snapshot.val())
+      })
+    })
 })
