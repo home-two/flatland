@@ -9,7 +9,7 @@ const id = uuid.v4()
 
 const initFirebase = () => {
   fb.set({
-    hello: "world" + Math.random(),
+    hello: "world",
     users: {
       bla: "bloo"
     }
@@ -17,7 +17,7 @@ const initFirebase = () => {
 }
 
 const setupUser = () => {
-  fb.child("users").set({
+  fb.child("users").update({
     [id]: {
       x: 0,
       y: 0,
@@ -27,11 +27,9 @@ const setupUser = () => {
 }
 
 fb.once("value", (snapshot) => {
-  console.log('ss: ', snapshot.exists())
   if (snapshot.exists()) {
     setupUser()
   } else {
     initFirebase()
   }
 })
-
