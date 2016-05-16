@@ -1,6 +1,12 @@
-import React from 'react'
+import FB from "firebase"
 
-const foo = <div />
 
-console.log(foo)
 
+const fbUri = "https://flatlander.firebaseio.com"
+const fb = new FB(fbUri)
+
+
+
+fb.set({
+  hello: "world!",
+})
