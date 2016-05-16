@@ -16,13 +16,10 @@ const initFirebase = () =>
     }
   })
 
-const checkAndInitFirebase = (snapshot) => {
-  if (!snapshot.exists()) {
-    return initFirebase()
-  } else {
-    return Promise.resolve()
-  }
-}
+const checkAndInitFirebase = (snapshot) =>
+  !snapshot.exists()
+    ? initFirebase()
+    : Promise.resolve()
 
 const setupUser = () => {
   fb.child("users").update({
