@@ -46,8 +46,14 @@ const setupUser = () =>
     })
   })
 
+const controller = {
+  moveUser ({ id, x, y }) {
+    fb.child("users").child(id).update({ x, y })
+  }
+}
+
 const render = (data) => {
-  ReactDOM.render(<App data={data}/>, document.getElementById("app"))
+  ReactDOM.render(<App controller={controller} data={data}/>, document.getElementById("app"))
 }
 
 fb.once("value", (snapshot) => {

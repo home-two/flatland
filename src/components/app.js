@@ -11,10 +11,11 @@ export default class App extends React.Component {
 
   render () {
     const {users} = this.props.data
+    const {moveUser} = this.props.controller
     return (
       <div>
         {_.map(users, (user, key) =>
-          <User key={key} user={user}/>
+          <User key={key}  user={{id: key, ...user}} onMove={moveUser}/>
         )}
       </div>
     )
