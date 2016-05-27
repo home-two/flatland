@@ -13,7 +13,7 @@ export default class User extends React.Component {
           top: y,
           backgroundColor: color
         }}
-      >HOOOOOOOO</div>
+      ></div>
     )
   }
 }

@@ -4,6 +4,19 @@ import ReactDOM from "react-dom"
 
 import App from "./components/app"
 
+
+
+// Helpers
+
+const randomPosition = () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+})
+
+
+
+// App
+
 const fbUri = "https://flatlander.firebaseio.com"
 const fb = new FB(fbUri)
 const userOnline = new FB(`${fbUri}/.info/connected`)
@@ -19,10 +32,10 @@ const checkAndInitFirebase = (snapshot) =>
     ? initFirebase()
     : Promise.resolve()
 
+
 const setupUser = () =>
   fb.child("users").push({
-    x: Math.random() * 800,
-    y: Math.random() * 800,
+    ...randomPosition(),
     color: colors[Math.floor(Math.random() * colors.length)],
   })
   .then((userRef) => {
