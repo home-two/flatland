@@ -1,6 +1,8 @@
 import FB from "firebase"
+import React from "react"
+import ReactDOM from "react-dom"
 
-
+import App from "./components/app"
 
 const fbUri = "https://flatlander.firebaseio.com"
 const fb = new FB(fbUri)
@@ -35,7 +37,11 @@ const setupUser = () =>
   })
 
 const render = (data) => {
+  
   console.log("rendering: ", data)
+
+  ReactDOM.render(<App data={data}/>, document.getElementById("app"))
+
 }
 
 fb.once("value", (snapshot) => {
