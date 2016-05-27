@@ -23,6 +23,10 @@ export default class User extends React.Component {
           top: y,
           backgroundColor: color
         }}
+        onDragStart={(e) => {
+          console.log("div x: ", e.target.getBoundingClientRect().right)
+          console.log("mouse x: ", e.clientX)
+        }}
         draggable={true}
         onDragEnd={(e) => {
           const {clientX: x, clientY: y} = e
@@ -31,6 +35,8 @@ export default class User extends React.Component {
         onDrag={(e) => {
           const {clientX: x, clientY: y} = e
           onMove({id, x, y})
+
+          // console.log("pageX, clientX", e.pageX, e.clientX)
         }}
       ></div>
     )
