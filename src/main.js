@@ -34,11 +34,7 @@ const setupUser = () =>
   })
 
 const render = (data) => {
-
-  console.log("rendering: ", data)
-
   ReactDOM.render(<App data={data}/>, document.getElementById("app"))
-
 }
 
 fb.once("value", (snapshot) => {
