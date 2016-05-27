@@ -17,15 +17,18 @@ export default class User extends React.Component {
       <div
         style={{
           position: "absolute",
-          width: 20,
-          height: 20,
+          width: 100,
+          height: 100,
           left: x,
           top: y,
           backgroundColor: color
         }}
         draggable={true}
         onDragEnd={(e) => {
-          console.log('drag end ', e.pageX)
+          const {clientX: x, clientY: y} = e
+          onMove({id, x, y})
+        }}
+        onDrag={(e) => {
           const {clientX: x, clientY: y} = e
           onMove({id, x, y})
         }}
