@@ -29,19 +29,14 @@ const setupUser = () =>
   .then((userRef) => {
     userOnline.on("value", (snapshot) => {
       if (snapshot.val()) {
-        userRef.onDisconnect.remove()
+        userRef.onDisconnect().remove()
       }
     })
   })
 
-
-
-
 const render = (data) => {
   console.log("rendering: ", data)
 }
-
-
 
 fb.once("value", (snapshot) => {
   // Does the database exit? If not initate it.
