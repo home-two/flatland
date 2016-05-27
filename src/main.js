@@ -1,11 +1,10 @@
 import FB from "firebase"
-import uuid from "uuid"
 
 
 
 const fbUri = "https://flatlander.firebaseio.com"
 const fb = new FB(fbUri)
-const id = uuid.v4()
+const userOnline = new FB(`${fbUri}/.info/connected`)
 const colors = [ "red", "green", "blue", "orange", "purple" ]
 
 const initFirebase = () =>
@@ -21,27 +20,33 @@ const checkAndInitFirebase = (snapshot) =>
     ? initFirebase()
     : Promise.resolve()
 
-const setupUser = () => {
-  fb.child("users").update({
-    [id]: {
-      x: Math.random() * 800,
-      y: Math.random() * 800,
-      color: colors[Math.floor(Math.random() * colors.length)],
-    },
+const setupUser = () =>
+  fb.child("users").push({
+    x: Math.random() * 800,
+    y: Math.random() * 800,
+    color: colors[Math.floor(Math.random() * colors.length)],
   })
-}
+  .then((userRef) => {
+    userOnline.on("value", (snapshot) => {
+      if (snapshot.val()) {
+        userRef.onDisconnect.remove()
+      }
+    })
+  })
 
 
 
-
-// render
 
 const render = (data) => {
   console.log("rendering: ", data)
 }
 
+
+
 fb.once("value", (snapshot) => {
+  // Does the database exit? If not initate it.
   checkAndInitFirebase(snapshot)
+    // Does the user exit? If not initate them.
     .then(() => setupUser())
     .then(() => {
       fb.on("value", (snapshot) => {
