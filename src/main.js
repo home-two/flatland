@@ -11,10 +11,7 @@ const colors = [ "red", "green", "blue", "orange", "purple" ]
 
 const initFirebase = () =>
   fb.set({
-    hello: "world",
-    users: {
-      bla: "bloo"
-    }
+    hello: "world"
   })
 
 const checkAndInitFirebase = (snapshot) =>
@@ -37,7 +34,7 @@ const setupUser = () =>
   })
 
 const render = (data) => {
-  
+
   console.log("rendering: ", data)
 
   ReactDOM.render(<App data={data}/>, document.getElementById("app"))
@@ -45,9 +42,9 @@ const render = (data) => {
 }
 
 fb.once("value", (snapshot) => {
-  // Does the database exit? If not initate it.
+  // Does the database exit? If not initialize it.
   checkAndInitFirebase(snapshot)
-    // Does the user exit? If not initate them.
+    // Does the user exit? If not initialize them.
     .then(() => setupUser())
     .then(() => {
       fb.on("value", (snapshot) => {
