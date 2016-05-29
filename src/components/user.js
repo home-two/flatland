@@ -5,13 +5,13 @@ export default class User extends React.Component {
     onMove () {},
   }
 
+  state = {
+    dragOffset: { x: 0, y: 0 },
+  }
+
   render () {
     const { id, x, y, color } = this.props.user
     const { onMove } = this.props
-
-    // onMove({ id, x: 1, y: 1 })
-
-
 
     return (
       <div
@@ -23,20 +23,38 @@ export default class User extends React.Component {
           top: y,
           backgroundColor: color
         }}
-        onDragStart={(e) => {
-          console.log("div x: ", e.target.getBoundingClientRect().right)
-          console.log("mouse x: ", e.clientX)
-        }}
         draggable={true}
-        onDragEnd={(e) => {
-          const {clientX: x, clientY: y} = e
-          onMove({id, x, y})
+        onDragStart={(e) => {
+          console.log("DRAG_START")
+          const bounds = e.target.getBoundingClientRect()
+          this.setState({
+            dragOffset: {
+              x: e.clientX - bounds.left,
+              y: e.clientY - bounds.top,
+            }
+          })
         }}
         onDrag={(e) => {
-          const {clientX: x, clientY: y} = e
-          onMove({id, x, y})
-
-          // console.log("pageX, clientX", e.pageX, e.clientX)
+          const { dragOffset } = this.state
+          console.log("e.clientY", e.clientY)
+          console.log("e.screenY", e.clientY)
+          onMove({
+            id,
+            x: e.clientX - dragOffset.x,
+            y: e.clientY - dragOffset.y,
+          })
+        }}
+        onDragEnd={(e) => {
+          const bounds = e.target.getBoundingClientRect()
+          console.log("====DRAG_END====")
+          console.log("e.clientY", e.clientY)
+          console.log("e.screenY", e.clientY)
+          console.log("e.screenY - bounds.height", e.clientY - bounds.height)
+          onMove({
+            id,
+            x: e.clientX,
+            y: e.clientY - bounds.height,
+          })
         }}
       ></div>
     )
