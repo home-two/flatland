@@ -8,8 +8,43 @@ export default class User extends React.Component {
   constructor (props) {
     super(props)
 
+    this.onMouseDown = (e) => {
+      const bounds = e.target.getBoundingClientRect()
+      this.setState({
+        dragOffset: {
+          x: e.pageX - bounds.left,
+          y: e.pageY - bounds.top,
+        }
+      }, () => {
+        window.addEventListener("mousemove", this.onMouseMove)
+        window.addEventListener("mouseup", this.onMouseUp)
+      })
+    }
+
     this.onMouseMove = (e) => {
       // NB: remember e.nativeEvent.movementX/Y
+      console.log("onMouseMove",e)
+      const { dragOffset } = this.state
+      const {
+        onMove,
+        user: {
+          id,
+        }
+      } = this.props
+      console.log("Do onMove")
+      onMove({
+        id,
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y,
+      })
+    }
+
+    this.onMouseUp = () => {
+      window.removeEventListener("mousemove", this.onMouseMove)
+      window.removeEventListener("mouseup", this.onMouseUp)
+    }
+    this.onTouchMove = (e) => {
+      console.log("onTouchMove", e)
       const { dragOffset } = this.state
       const {
         onMove,
@@ -20,15 +55,16 @@ export default class User extends React.Component {
       if (this.state.mouseDown) {
         onMove({
           id,
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
+          x: e.pageX - dragOffset.x,
+          y: e.pageY - dragOffset.y,
         })
       }
     }
 
-    this.onMouseUp = () => {
-      window.removeEventListener("mousemove", this.onMouseMove)
-      window.removeEventListener("mouseup", this.onMouseUp)
+    this.onTouchEnd = (e) => {
+      console.log("onTouchEnd", e);
+      // window.removeEventListener("mousemove", this.onMouseMove)
+      // window.removeEventListener("mouseup", this.onMouseUp)
     }
   }
 
@@ -53,18 +89,8 @@ export default class User extends React.Component {
           backgroundColor: color
         }}
 
-        onMouseDown={(e) => {
-          const bounds = e.target.getBoundingClientRect()
-          this.setState({
-            dragOffset: {
-              x: e.clientX - bounds.left,
-              y: e.clientY - bounds.top,
-            }
-          }, () => {
-            window.addEventListener("mousemove", this.onMouseMove)
-            window.addEventListener("mouseup", this.onMouseUp)
-          })
-        }}
+        onTouchStart={this.onMouseDown}
+        onMouseDown={this.onMouseDown}
       ></div>
     )
   }
