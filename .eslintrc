@@ -109,7 +109,7 @@
       }
     ],
     "object-curly-spacing": [
-      1,
+      0,
       "always",
       {
         "objectsInObjects": false,
