@@ -23,7 +23,6 @@ export default class User extends React.Component {
 
     this.onMouseMove = (e) => {
       // NB: remember e.nativeEvent.movementX/Y
-      console.log("onMouseMove",e)
       const { dragOffset } = this.state
       const {
         onMove,
@@ -43,8 +42,23 @@ export default class User extends React.Component {
       window.removeEventListener("mousemove", this.onMouseMove)
       window.removeEventListener("mouseup", this.onMouseUp)
     }
+
+    this.onTouchStart = (e) => {
+      e.preventDefault()
+      const bounds = e.target.getBoundingClientRect()
+      const {pageX, pageY} = e.nativeEvent
+      this.setState({
+        dragOffset: {
+          x: pageX - bounds.left,
+          y: pageY - bounds.top,
+        }
+      }, () => {
+        window.addEventListener("touchmove", this.onTouchMove)
+        window.addEventListener("touchend", this.onTouchEnd)
+      })
+    }
+
     this.onTouchMove = (e) => {
-      console.log("onTouchMove", e)
       const { dragOffset } = this.state
       const {
         onMove,
@@ -52,19 +66,17 @@ export default class User extends React.Component {
           id,
         }
       } = this.props
-      if (this.state.mouseDown) {
-        onMove({
-          id,
-          x: e.pageX - dragOffset.x,
-          y: e.pageY - dragOffset.y,
-        })
-      }
+      console.log("dragOffset: ", dragOffset)
+      onMove({
+        id,
+        x: e.pageX - dragOffset.x,
+        y: e.pageY - dragOffset.y,
+      })
     }
 
-    this.onTouchEnd = (e) => {
-      console.log("onTouchEnd", e);
-      // window.removeEventListener("mousemove", this.onMouseMove)
-      // window.removeEventListener("mouseup", this.onMouseUp)
+    this.onTouchEnd = () => {
+      window.removeEventListener("touchmove", this.onTouchMove)
+      window.removeEventListener("touchend", this.onTouchEnd)
     }
   }
 
@@ -89,7 +101,7 @@ export default class User extends React.Component {
           backgroundColor: color
         }}
 
-        onTouchStart={this.onMouseDown}
+        onTouchStart={this.onTouchStart}
         onMouseDown={this.onMouseDown}
       ></div>
     )
