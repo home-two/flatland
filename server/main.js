@@ -8,9 +8,21 @@ const id = "9b5fb372b18bd26c6936"
 
 const server = createServer()
 
-const initLogin = () => {
+const parseQueryString = (urlString) => {
+  return urlString
+    .split("?")[1]
+    .split("&")
+    .reduce((acc, x) => {
+      const [key, val] = x.split("=")
+      return Object.assign(acc, {
+        [key]: val
+      })
+    }, {})
+}
+
+const initLogin = (msg) => {
   return new Promise((resolve/*, reject*/) => {
-    console.log("init login from client")
+    console.log("init login from client: ", parseQueryString(msg.url))
     resolve("AHOY!")
   })
 }
@@ -18,23 +30,23 @@ const initLogin = () => {
 const authLogin = () => {
   return new Promise((resolve, reject) => {
     console.log("authenticating login with gh")
-    
-    // send a req to gh with secret and id
+
+    // send a msg to gh with secret and id
     // if it's ok resolve
     // if it's not ok reject
   })
 }
 
-server.on("request", (req, res) => {
-  console.log("Got a request!: ", req.method)
-  switch (req.method) {
+server.on("request", (msg, res) => {
+  console.log("Got a request!: ", msg.method)
+  switch (msg.method) {
     case "GET":
-      initLogin().then(() => {
+      initLogin(msg).then(() => {
         res.end()
       })
       break
     default:
-      console.log("unknown method:", req.method)
+      console.log("unknown method:", msg.method)
       res.writeHead(404)
       res.end()
   }
