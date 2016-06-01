@@ -3,7 +3,8 @@
 
 const { createServer } = require("http")
 
-
+const secret = "2afe7df060cae700dbb987ff6f988d4ebe5c26b8"
+const id = "9b5fb372b18bd26c6936"
 
 const server = createServer()
 
@@ -11,6 +12,16 @@ const initLogin = () => {
   return new Promise((resolve/*, reject*/) => {
     console.log("init login from client")
     resolve("AHOY!")
+  })
+}
+
+const authLogin = () => {
+  return new Promise((resolve, reject) => {
+    console.log("authenticating login with gh")
+    
+    // send a req to gh with secret and id
+    // if it's ok resolve
+    // if it's not ok reject
   })
 }
 
