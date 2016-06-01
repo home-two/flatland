@@ -5,8 +5,10 @@
   "main": "src/main.js",
   "scripts": {
     "beforebuild": "mkdir -p build && cp index.html build",
-    "start": "npm run beforebuild && webpack-dev-server -d --inline",
+    "start": "node server/main",
     "start-production": "npm start -p --devtool sourcemap",
+    "dev-client": "npm run beforebuild && webpack-dev-server -d --inline",
+    "dev-server": "nodemon server/main",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src/main.js",
     "deploy": "npm run build-production && firebase deploy",
@@ -42,6 +44,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "eslint": "^2.8.0",
     "eslint-plugin-react": "^5.0.1",
+    "nodemon": "^1.9.2",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
   },
