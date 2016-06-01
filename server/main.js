@@ -7,9 +7,26 @@ const { createServer } = require("http")
 
 const server = createServer()
 
+const initLogin = () => {
+  return new Promise((resolve/*, reject*/) => {
+    console.log("init login from client")
+    resolve("AHOY!")
+  })
+}
+
 server.on("request", (req, res) => {
-  console.log("Got a request!")
-  res.end()
+  console.log("Got a request!: ", req.method)
+  switch (req.method) {
+    case "GET":
+      initLogin().then(() => {
+        res.end()
+      })
+      break
+    default:
+      console.log("unknown method:", req.method)
+      res.writeHead(404)
+      res.end()
+  }
 })
 
 server.listen("9898", () => {
