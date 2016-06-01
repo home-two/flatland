@@ -1,3 +1,6 @@
+// NOTE: HTTP module documentation:
+// https://nodejs.org/api/http.html#http_class_http_server
+
 const { createServer } = require("http")
 
 
