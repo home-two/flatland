@@ -2,6 +2,7 @@
 // https://nodejs.org/api/http.html#http_class_http_server
 
 const { createServer } = require("http")
+const request = require("request")
 
 const secret = "2afe7df060cae700dbb987ff6f988d4ebe5c26b8"
 const id = "9b5fb372b18bd26c6936"
@@ -22,8 +23,22 @@ const parseQueryString = (urlString) => {
 
 const initLogin = (msg) => {
   return new Promise((resolve/*, reject*/) => {
-    console.log("init login from client: ", parseQueryString(msg.url))
-    resolve("AHOY!")
+    const { code } = parseQueryString(msg.url)
+    console.log("Authenticate with Github. Session:", code)
+    request({
+      uri: "https://github.com/login/oauth/access_token",
+      method: "post",
+      json: {
+        client_id: id,
+        client_secret: secret,
+        code,
+      }
+    }, (error, response) => {
+      // TODO error handling
+      console.log("ACCESS TOKEN RESPONSE")
+      console.log("Credentials: %j", response.body)
+      resolve("")
+    })
   })
 }
 
